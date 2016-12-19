@@ -2,10 +2,11 @@
 /* eslint-env node, es6 */
 
 const stylelint = require('stylelint');
-const functionArgumentsSearch = require('stylelint/dist/utils/functionArgumentsSearch').default;
 const report = stylelint.utils.report;
 const ruleMessages = stylelint.utils.ruleMessages;
 const validateOptions = stylelint.utils.validateOptions;
+const styleSearch = require('style-search');
+const balancedMatch = require('balanced-match');
 
 const ruleName = 'tradingview/function-url-local-root';
 
@@ -25,19 +26,31 @@ const rule = stylelint.createPlugin(ruleName, function(options) {
 		}
 
 		root.walkDecls(function(decl) {
-			functionArgumentsSearch(decl.toString().toLowerCase(), 'url', (args, index) => {
-				const isRoot = /^\s*['"]?\s*\/(?!\/)/.test(args);
-				const rootExpected = (options === 'always');
-				if (isRoot !== rootExpected) {
-					report({
-						message: rootExpected ? messages.expected : messages.rejected,
-						node: decl,
-						index,
-						result,
-						ruleName,
-					});
+			const source = decl.toString();
+			styleSearch(
+				{
+					source: source.toLowerCase(),
+					target: 'url',
+					functionNames: 'check',
+				},
+				(match) => {
+					if (source[match.endIndex] !== "(") {
+						return;
+					}
+					const parensMatch = balancedMatch("(", ")", source.substr(match.startIndex));
+					const isRoot = /^\s*['"]?\s*\/(?!\/)/.test(parensMatch.body);
+					const rootExpected = (options === 'always');
+					if (isRoot !== rootExpected) {
+						report({
+							message: rootExpected ? messages.expected : messages.rejected,
+							node: decl,
+							index: match.endIndex + 1,
+							result,
+							ruleName,
+						});
+					}
 				}
-			});
+			);
 		});
 	};
 });

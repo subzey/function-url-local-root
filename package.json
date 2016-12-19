@@ -1,11 +1,13 @@
 {
   "name": "stylelint-function-url-local-root",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "description": "Allow or disallow setting filenames from root",
   "main": "function-url-local-root.js",
   "author": "Anton Khlynovskiy <subzey@gmail.com>",
   "license": "WTFPL",
   "dependencies": {
+    "balanced-match": "^0.4.2",
+    "style-search": "^0.1.0",
     "stylelint": "^7.6.0"
   }
 }
