@@ -1,6 +1,6 @@
 {
   "name": "stylelint-function-url-local-root",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0",
   "description": "Allow or disallow setting filenames from root",
   "main": "function-url-local-root.js",
   "author": "Anton Khlynovskiy <subzey@gmail.com>",
@@ -8,6 +8,10 @@
   "dependencies": {
     "balanced-match": "^0.4.2",
     "style-search": "^0.1.0",
-    "stylelint": "^7.6.0"
+    "stylelint": ">=7.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/subzey/function-url-local-root.git"
   }
 }
